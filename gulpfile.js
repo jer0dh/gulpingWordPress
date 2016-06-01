@@ -156,6 +156,7 @@ gulp.task('styles', function() {
 /* setup keys so no login or password is required when run */
 /* BE CAREFUL! This config will erase anything on the remote side that is not on the local side.  Make sure you have the right directory! */
 
+
 var remote = JSON.parse(fs.readFileSync('./rsync.json'));
 gulp.task('deploy', function() {
     return gulp.src(themeName + '/**')
