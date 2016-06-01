@@ -5,7 +5,8 @@ This is a starting point to developing a WordPress Theme using Gulp.  We switche
   * This gulp process watches in the background for changes to the theme files.  
     * If it's a change in a javascript file, it will concatenate, minimize, and then deploy to the remote server.
     * If it's a change in a php file, it will deploy to the remote server.
-    * If its' a change in the scss styles file, it will recreate the style.css file and deploy to the remote server.
+    * If it's a change in the scss styles file, it will recreate the style.css file and deploy to the remote server.
+    * If it's a new image, it will run the `imagemin` process on it to compress it. 
   * Includes `postcss` so one can use SASS like commands, selectors in the style sheets.  We mainly use this so we can use variables.
   * Allows one to use the ES2015 javascript syntax and it will transpile it to regular javascript compatible to today's browsers
   * Jasmine Unit Testing of javascript if wanted
