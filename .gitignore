@@ -1,0 +1,4 @@
+node_modules/
+.idea/
+mytheme/js/dist/
+rsync.json
