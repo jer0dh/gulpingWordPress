@@ -8,16 +8,9 @@ define( 'CHILD_THEME_URL', 'http://jhtechservices.com/' );
 define( 'CHILD_THEME_VERSION', '1.0.0' );
 
 
-//* Enqueue Google Fonts
-add_action( 'wp_enqueue_scripts', 'genesis_sample_google_fonts' );
-function genesis_sample_google_fonts() {
-
-	wp_enqueue_style( 'google-fonts', 'https://fonts.googleapis.com/css?family=Noticia+Text:400,700,400italic|Raleway:400,700', array(), CHILD_THEME_VERSION );
-
-}
 add_action( 'wp_enqueue_scripts', 'myt_enqueue_script');
 function myt_enqueue_script() {
-	wp_enqueue_script( 'myt_scripts', get_bloginfo( 'stylesheet_directory' ) . '/js/script.min.js', array( 'jquery' ), '1.0.0' );
+	wp_enqueue_script( 'myt_scripts', get_bloginfo( 'stylesheet_directory' ) . '/js/dist/scripts.min.js', array( 'jquery' ), '1.0.0',true );
 }
 
 //* Add HTML5 markup structure
@@ -53,3 +46,12 @@ add_action( 'genesis_footer', 'myt_footer' );
 function myt_footer() {
 	echo do_shortcode('[creds]');
 }
+
+/* Enqueue Google Fonts
+add_action( 'wp_enqueue_scripts', 'genesis_sample_google_fonts' );
+function genesis_sample_google_fonts() {
+
+	wp_enqueue_style( 'google-fonts', 'https://fonts.googleapis.com/css?family=Noticia+Text:400,700,400italic|Raleway:400,700', array(), CHILD_THEME_VERSION );
+
+}
+*/
