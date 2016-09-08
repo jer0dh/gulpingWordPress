@@ -48,7 +48,12 @@ var jsScripts = ['my_scripts.js'];
 var jsScriptsWithPath = jsScripts.map( function (s) {
     return themeName + '/js/src/' + s;
 });
-
+//Create a variable containing all scripts with path with a negated ! in front for tasks we want to have these scripts excluded
+var negatedJsScriptsWithPath = jsScripts.map( function (s) {
+    return '!' + themeName + '/js/src/' + s;
+});
+console.log(negatedJsScriptsWithPath);
+//Create 
 
 /**
  * Cleaning tasks
@@ -65,17 +70,18 @@ gulp.task('cleanScripts', function(cb){
 gulp.task('clean', ['cleanImages', 'cleanScripts']);
 
 /**
- * Copying vendor js files - js files you don't want concatenated with others
- *   will need to enqueue them separately in functions.php.  Otherwise add vendor js into src
- *   and place the js file name in the jsScripts array above in the order it should be concatenated.
+ * Copying vendor or separate js files - js files you don't want concatenated with others
+ *   will need to enqueue them separately in functions.php.  If you want a vendor or other js file concatenated, place 
+ *   the js file name in the jsScripts array above in the order it should be concatenated.
  */
 gulp.task('vendorjs', function() {
-   gulp.src(themeName + '/js/src/vendor/**/*.js')
+    var scripts = negatedJsScriptsWithPath.concat([themeName + '/js/src/**/*.js']);
+     return gulp.src(scripts)  //include all js under src except for js to be concatenated
        .pipe(sourcemaps.init({loadMaps: true}))
        .pipe(uglify())
        .pipe(rename({extname: '.min.js'}))
        .pipe(sourcemaps.write('.'))
-       .pipe (gulp.dest(themeName + '/js/dist/vendor/'));
+       .pipe (gulp.dest(themeName + '/js/dist/'));
 });
 
 
@@ -96,6 +102,13 @@ gulp.task('other-scripts', function() {
  //       .pipe(browserSync.stream());
 });
 
+/**
+ *  This task copies all other files like css or images needed by js scripts, usually vendor js
+ */
+gulp.task('script-assets', function(){
+    return gulp.src([themeName + '/js/src/**/*', '!' + themeName + '/js/src/**/*.js'])
+        .pipe(gulp.dest( themeName + '/js/dist/'));
+});
 /* 
 'images' looks in the images/src directory which is not in the same tree as the themename.  It creates optimized images
 in the /images/dist directory.  These can be manually moved to the themename/images folder or uploaded to the wordpress
@@ -159,19 +172,10 @@ gulp.task('deploy', function() {
         }))
 
 });
-/**
- *  This task copies all other files like css or images needed by js scripts, usually vendor js
- */
-gulp.task('script-assets', function(){
-   return gulp.src([themeName + '/js/src/**/*', '!' + themeName + '/js/src/**/*.js'])
-       .pipe(gulp.dest( themeName + '/js/dist/'));
-});
+
 
 /* when certain files change - these tasks make sure they are run in sequence */
 
-gulp.task('deploy-scripts', function(done) {
-    runSequence('scripts', 'deploy', function() { done(); });
-});
 
 gulp.task('deploy-other-scripts', function(done) {
     runSequence('other-scripts', 'script-assets', 'vendorjs', 'deploy', function() { done(); });
@@ -181,9 +185,13 @@ gulp.task('deploy-styles', function(done) {
     runSequence('sortScss','styles', 'deploy', function() { done(); });
 });
 
+gulp.task('clean-build', function(done) {
+    runSequence('other-scripts', 'script-assets', 'vendorjs', 'sortScss','styles', 'deploy', function() { done(); });
+});
+
 gulp.task('default', ['deploy-styles',  'images', 'deploy-other-scripts'], function() {
     gulp.watch(themeName + '/**/*.scss', ['deploy-styles']);
-    gulp.watch(themeName +'/js/src/**/*.js', ['deploy-other-scripts']);
+    gulp.watch(themeName +'/js/src/**/*.*', ['deploy-other-scripts']);
     gulp.watch(themeName + '/**/*.php', ['deploy']);
     gulp.watch('src/images/**.*', ['images']);
 });

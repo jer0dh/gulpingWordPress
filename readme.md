@@ -53,12 +53,18 @@ The gulp process will automatically use the package.json file to fill out the co
 */
 ```
 ### Changes ###
+  
+  *2016-09-09*
+  * Changing gulp to process all javascript under src.  If in jsConcatenate, then it processes separately.  So javascript does not have to be under `/vendor`
+  * Watches ALL files under the `/js/src` directory so if any assets javascript uses changes, it will automatically deploy
+ 
+ 
   *2016-09-06*
-    * Allowing gulp to process to any .scss file in the theme directory
-    * Fixing sourcemap issue so map is a separate file
-    * Updating `style.scss`
-    * Adding postcss-sorting
-    * Adding `rsync.json`
-    * moved all browserify, app module development to separate files as reference `_app_dev` in filename
+  * Allowing gulp to process to any .scss file in the theme directory
+  * Fixing sourcemap issue so map is a separate file
+  * Updating `style.scss`
+  * Adding postcss-sorting
+  * Adding `rsync.json`
+  * moved all browserify, app module development to separate files as reference `_app_dev` in filename
     
     
